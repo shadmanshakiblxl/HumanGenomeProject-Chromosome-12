@@ -1,4 +1,4 @@
-# 🧬 Analysis of Recombination Rates on Human Chromosome 12
+#Analysis of Recombination Rates on Human Chromosome 12
 
 > **Linear Regression of Genetic (cM) versus Physical (Mb) Distance in Female Meiosis**  
 > **Author:** Shadman Shakib BRAC University Department of Biotechnology  
@@ -8,7 +8,7 @@
 
 ---
 
-## 📌 Executive Summary
+##  Executive Summary
 
 This repository contains an interactive, modern-minimalist web platform presenting research on human meiotic recombination non-uniformity across **Chromosome 12**. 
 
@@ -21,29 +21,126 @@ The findings confirm that physical distance in megabases ($\text{Mb}$) does not 
 
 ---
 
-## 📊 Key Findings & Mathematical Results
+# Human Chromosome 12 Recombination Rate Analysis
 
-$$\text{Genetic Distance (cM)} = m \cdot \text{Physical Position (Mb)} + c$$
-
-| Sub-Region | Interval Name | Slope ($m$) | Intercept ($c$) | Fitted Equation | Biological Interpretation |
-| :--- | :--- | :---: | :---: | :---: | :--- |
-| **Region A** | Female CEN to 120 | **`1.40 cM/Mb`** | `-63.69` | $y = 1.40x - 63.69$ | **Higher Recombination Density:** Elevated crossover frequency per physical megabase. |
-| **Region B** | Female 120 to End | **`0.95 cM/Mb`** | `-22.64` | $y = 0.95x - 22.64$ | **Lower Recombination Density:** Reduced exchange frequency toward the distal region. |
-
-### 💡 Critical Takeaways
-- **+47.4% Rate Variation**: Recombination density in Region A is nearly 1.5 times higher than in Region B.
-- **Non-Linear Mapping**: Recombination hotspots create localized steepening along the genetic map, explaining why physical length does not predict genetic distance.
+This repository contains the dataset, linear regression scripts, and analytical findings for the female meiotic recombination rate analysis on **Human Chromosome 12**. The study compares genetic distance ($\text{cM}$) against physical distance ($\text{Mb}$) to demonstrate the non-uniformity of recombination rates across genomic regions.
 
 ---
 
-## 💻 Web Application Features
+
+
+* **Primary Objective:** Quantify regional meiotic recombination rates ($\text{cM/Mb}$) along the $q$-arm of female Chromosome 12 using Ordinary Least-Squares (OLS) linear regression ($y = mx + c$).
+
+
+
+---
+
+##  Key Findings
+
+* **Region A (Female CEN to 120):**
+* **Equation:** $y = 0.99x - 32.33$ ($R^2 \approx 0.986$)
+
+
+* **Recombination Rate:** $0.99 \text{ cM/Mb}$
+
+
+
+* **Region B (Female 120 to End):**
+* **Equation:** $y = 1.45x - 79.71$ ($R^2 \approx 0.984$)
+
+
+* **Recombination Rate:** $1.45 \text{ cM/Mb}$
+
+
+
+* **Rate Shift:** Transitioning from the proximal pericentromeric region (Region A) to the distal telomeric region (Region B) yields a **46.46% increase** in recombination rate:
+
+
+
+$$\frac{1.45 - 0.99}{0.99} \times 100\% \approx 46.46\%$$
+
+
+
+
+---
+
+## Dataset Summary
+
+Data coordinates were digitized from high-resolution genetic maps using computer-assisted image software (WebPlotDigitizer).
+
+| Metric | Region A (Female CEN to 120) | Region B (Female 120 to End) |
+| --- | --- | --- |
+| **Data Points** | 19 coordinate pairs
+
+ | 18 coordinate pairs
+
+ |
+| **Physical Range (Mb)** | $40.07 - 110.14 \text{ Mb}$<br> | $106.30 - 150.73 \text{ Mb}$<br> |
+| **Genetic Range (cM)** | $2.99 - 78.10 \text{ cM}$<br> | $74.51 - 139.01 \text{ cM}$<br> |
+| **Slope ($m$)** | $0.99 \text{ cM/Mb}$<br> | $1.45 \text{ cM/Mb}$<br> |
+| **Intercept ($c$)** | $-32.33$<br> | $-79.71$<br> |
+
+
+
+##  Usage
+
+### Prerequisites
+
+Ensure Python 3.x is installed along with the required libraries:
+
+```bash
+pip install numpy pandas matplotlib scipy
+
+```
+
+### Running the Analysis
+
+Execute the main regression script to calculate slope parameters and produce visualization plots:
+
+```bash
+python scripts/regression_analysis.py
+
+```
+
+---
+
+##  Biological Context & Discussion
+
+1. **Decoupling of Distances:** The physical genome ($\text{Mb}$) does not linearly map to genetic recombination ($\text{cM}$).
+
+
+2. **Telomeric Enhancement:** Higher crossover frequencies occur in the distal telomeric region (Region B) compared to the pericentromeric region (Region A).
+
+
+3. **Hotspots & Chromatin Architecture:** Local fluctuations in slope illustrate the impact of regional chromatin structure and recombination hotspots across female meiosis.
+
+
+
+---
+
+##  References
+
+* **International Human Genome Sequencing Consortium** (2001). Initial sequencing and analysis of the human genome. *Nature*, 409(6822), 860–921.
+
+
+* **Kong, A., et al.** (2002). A high-resolution recombination map of the human genome. *Nature Genetics*, 31(3), 241–247.
+
+
+* **Myers, S., et al.** (2005). A fine-scale map of recombination rates and hotspots across the human genome. *Science*, 310(5746), 321–324.
+
+
+* **Yu, A., et al.** (2001). Comparison of human genetic and sequence-based physical maps. *Nature*, 409(6822), 951–953.
+
+
+
+## Web Application Features
 
 The accompanying single-page application (SPA) was built using a **modern minimalist green-scale aesthetic** featuring:
 
-- 🟢 **Interactive Scatter Plot & Linear Regression Canvas**: Switch views dynamically between combined continuous maps and isolated regional datasets with interactive tooltips.
-- 📐 **Slope & Rate Calculator**: Allows users to input custom physical coordinates (Mb) to estimate genetic distance (cM) using the fitted linear equations.
-- 📜 **Full PDF Paper Viewer**: Embedded research review access with direct link integration.
-- 📱 **Fully Responsive Layout**: Built with Tailwind CSS, custom modern typography, and smooth intersection-observer scroll animations.
+-  **Interactive Scatter Plot & Linear Regression Canvas**: Switch views dynamically between combined continuous maps and isolated regional datasets with interactive tooltips.
+-  **Slope & Rate Calculator**: Allows users to input custom physical coordinates (Mb) to estimate genetic distance (cM) using the fitted linear equations.
+- **Full PDF Paper Viewer**: Embedded research review access with direct link integration.
+- **Fully Responsive Layout**: Built with Tailwind CSS, custom modern typography, and smooth intersection-observer scroll animations.
 
 ---
 
