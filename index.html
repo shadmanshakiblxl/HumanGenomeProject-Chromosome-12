@@ -3,24 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chromosome 12 Recombination Rate Analysis | Shadman Shakib</title>
+    <title>Chromosome 12 Recombination Analysis | Modern Genomic Research</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
-
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-                        mono: ['"Space Grotesk"', 'monospace'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
                     },
                     colors: {
-                        brand: {
+                        emerald: {
                             50: '#f0fdf4',
                             100: '#dcfce7',
                             200: '#bbf7d0',
@@ -33,8 +37,18 @@
                             900: '#14532d',
                             950: '#052e16',
                         },
-                        emeraldDeep: '#064e3b',
-                        sage: '#e2e8f0',
+                        sage: {
+                            50: '#f4f7f5',
+                            100: '#e3eae5',
+                            200: '#c8d6cd',
+                            300: '#a3bba2',
+                            400: '#7a9b7a',
+                            500: '#5c7f5d',
+                            600: '#476549',
+                            700: '#3a513c',
+                            800: '#304232',
+                            900: '#29372a',
+                        }
                     }
                 }
             }
@@ -42,721 +56,694 @@
     </script>
 
     <style>
-        /* Custom minimalist scrollbar & animations */
+        body {
+            background-color: #fafbfb;
+            color: #0f172a;
+        }
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+        }
+        .green-gradient-text {
+            background: linear-gradient(135deg, #064e3b 0%, #059669 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .green-badge {
+            background: rgba(16, 185, 129, 0.08);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            color: #047857;
+        }
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .card-hover:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px -10px rgba(16, 185, 129, 0.08);
+        }
+        /* Custom scrollbar */
         ::-webkit-scrollbar {
             width: 6px;
+            height: 6px;
         }
         ::-webkit-scrollbar-track {
-            background: #f8fafc;
+            background: #f1f5f9;
         }
         ::-webkit-scrollbar-thumb {
             background: #cbd5e1;
             border-radius: 3px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #16a34a;
-        }
-
-        .scroll-reveal {
-            opacity: 0;
-            transform: translateY(24px);
-            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .scroll-reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .subtle-grid {
-            background-size: 32px 32px;
-            background-image: 
-                linear-gradient(to right, rgba(22, 163, 74, 0.04) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(22, 163, 74, 0.04) 1px, transparent 1px);
-        }
-
-        .glass-card {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(22, 163, 74, 0.12);
-        }
-
-        .glow-effect {
-            box-shadow: 0 0 50px -10px rgba(34, 197, 94, 0.12);
+            background: #10b981;
         }
     </style>
 </head>
-<body class="bg-slate-50/50 text-slate-800 antialiased font-sans selection:bg-brand-200 selection:text-brand-950 min-h-screen flex flex-col">
+<body class="font-sans antialiased selection:bg-emerald-100 selection:text-emerald-900">
 
-    <!-- Sticky Header Navigation -->
-    <header class="sticky top-0 z-50 backdrop-blur-md bg-white/80 border-b border-slate-200/60 transition-all duration-300">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <a href="#" class="flex items-center gap-2.5 group">
-                <div class="w-8 h-8 rounded-lg bg-brand-900 text-brand-300 flex items-center justify-center font-mono font-bold text-sm tracking-wider shadow-sm group-hover:scale-105 transition-transform">
+    <header class="fixed top-0 left-0 right-0 z-50 glass-nav transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <a href="#" class="flex items-center gap-3 group">
+                <div class="w-9 h-9 rounded-xl bg-emerald-900 text-emerald-300 flex items-center justify-center font-display font-semibold text-lg shadow-sm group-hover:bg-emerald-800 transition-colors">
                     12
                 </div>
                 <div class="flex flex-col">
-                    <span class="text-xs font-mono font-semibold tracking-wider text-brand-700 uppercase">Genome Research</span>
-                    <span class="text-sm font-medium text-slate-900 tracking-tight">Chromosome 12 Analysis</span>
+                    <span class="font-display font-semibold text-slate-900 tracking-tight text-base">CHROMO<span class="text-emerald-600">12</span></span>
+                    <span class="text-[10px] tracking-widest text-slate-400 font-medium uppercase">Recombination Study</span>
                 </div>
             </a>
 
-            <nav class="hidden md:flex items-center gap-8 text-xs font-medium tracking-wide uppercase text-slate-600">
-                <a href="#overview" class="hover:text-brand-700 transition-colors">Overview</a>
-                <a href="#critical-points" class="hover:text-brand-700 transition-colors">Highlights</a>
-                <a href="#infographic" class="hover:text-brand-700 transition-colors">Infographic</a>
-                <a href="#interactive-map" class="hover:text-brand-700 transition-colors">Map Data</a>
-                <a href="#calculator" class="hover:text-brand-700 transition-colors">Calculator</a>
+            <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
+                <a href="#overview" class="hover:text-emerald-700 transition-colors">Overview</a>
+                <a href="#interactive-map" class="hover:text-emerald-700 transition-colors">Spatial Map</a>
+                <a href="#regression-model" class="hover:text-emerald-700 transition-colors">Data Model</a>
+                <a href="#critical-points" class="hover:text-emerald-700 transition-colors">Critical Analysis</a>
+                <a href="#raw-data" class="hover:text-emerald-700 transition-colors">Raw Coordinates</a>
             </nav>
 
-            <div class="flex items-center gap-3">
-                <a href="https://drive.google.com/file/d/1tX6p-fAlWvwyNXUu1x_SKmBB829KhrHy/view?usp=sharing" target="_blank" rel="noopener noreferrer" 
-                   class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-900 text-brand-50 hover:bg-brand-800 transition-all shadow-sm text-xs font-medium tracking-wide group">
-                    <span>Read Review</span>
-                    <i data-lucide="external-link" class="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"></i>
-                </a>
-            </div>
+            <a href="https://drive.google.com/file/d/1xpuz_Is4ZE3pn8xgG0l4mUr_orm1mT4n/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-xs font-semibold tracking-wide text-white bg-emerald-900 hover:bg-emerald-800 transition-all shadow-sm hover:shadow-md active:scale-95">
+                <span>Read Full Review</span>
+                <i data-lucide="external-link" class="w-3.5 h-3.5 opacity-80"></i>
+            </a>
         </div>
     </header>
 
-    <main class="flex-grow">
-        <!-- Hero Section -->
-        <section id="overview" class="relative pt-16 pb-24 md:pt-24 md:pb-32 overflow-hidden subtle-grid border-b border-slate-200/60">
-            <!-- Background Radial Glow -->
-            <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-brand-100/60 blur-[120px] pointer-events-none rounded-full"></div>
-
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-                <div class="max-w-4xl mx-auto text-center">
-                    
-                    <!-- Author Badge -->
-                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-50 border border-brand-200/80 text-brand-800 text-xs font-mono font-medium mb-8 scroll-reveal">
-                        <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
-                        <span>BRAC University · Dept. of Biotechnology</span>
-                        <span class="text-slate-300">|</span>
-                        <span class="text-slate-600">Shadman Shakib</span>
-                    </div>
-
-                    <!-- Main Title -->
-                    <h1 class="text-3xl sm:text-5xl lg:text-6xl font-light text-slate-900 tracking-tight leading-[1.15] mb-6 scroll-reveal">
-                        Analysis of Recombination Rates on <br class="hidden sm:inline"/>
-                        <span class="font-semibold text-brand-900 underline decoration-brand-300 decoration-wavy decoration-2 underline-offset-8">Human Chromosome 12</span>
-                    </h1>
-
-                    <!-- Subtitle -->
-                    <p class="text-base sm:text-lg text-slate-600 font-normal leading-relaxed max-w-2xl mx-auto mb-10 scroll-reveal">
-                        Linear Regression Analysis of Genetic Distance (<span class="font-mono text-brand-800 font-medium">cM</span>) versus Physical Distance (<span class="font-mono text-brand-800 font-medium">Mb</span>) during Female Meiosis.
-                    </p>
-
-                    <!-- CTA Group -->
-                    <div class="flex flex-wrap items-center justify-center gap-4 mb-16 scroll-reveal">
-                        <a href="https://drive.google.com/file/d/1tX6p-fAlWvwyNXUu1x_SKmBB829KhrHy/view?usp=sharing" target="_blank" rel="noopener noreferrer" 
-                           class="px-6 py-3.5 rounded-full bg-brand-900 text-white font-medium text-sm hover:bg-brand-800 transition-all shadow-lg shadow-brand-950/10 flex items-center gap-2 group">
-                            <span>Read Full PDF Review</span>
-                            <i data-lucide="arrow-up-right" class="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"></i>
-                        </a>
-                        <a href="#interactive-map" class="px-6 py-3.5 rounded-full bg-white text-slate-700 border border-slate-200 hover:border-brand-300 font-medium text-sm transition-all shadow-sm">
-                            Explore Map Data
-                        </a>
-                    </div>
-
-                    <!-- Key Metrics Counter Grid -->
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-left scroll-reveal">
-                        <div class="glass-card p-5 rounded-2xl">
-                            <span class="block text-xs font-mono uppercase text-slate-500 tracking-wider mb-1">Region A Slope</span>
-                            <div class="text-2xl lg:text-3xl font-semibold text-brand-900 font-mono">1.40 <span class="text-xs font-sans text-slate-500 font-normal">cM/Mb</span></div>
-                            <span class="text-[11px] text-slate-500 mt-1 block">Female CEN to 120</span>
-                        </div>
-                        <div class="glass-card p-5 rounded-2xl">
-                            <span class="block text-xs font-mono uppercase text-slate-500 tracking-wider mb-1">Region B Slope</span>
-                            <div class="text-2xl lg:text-3xl font-semibold text-slate-800 font-mono">0.95 <span class="text-xs font-sans text-slate-500 font-normal">cM/Mb</span></div>
-                            <span class="text-[11px] text-slate-500 mt-1 block">Female 120 to End</span>
-                        </div>
-                        <div class="glass-card p-5 rounded-2xl">
-                            <span class="block text-xs font-mono uppercase text-slate-500 tracking-wider mb-1">Recombination Delta</span>
-                            <div class="text-2xl lg:text-3xl font-semibold text-brand-600 font-mono">+47.3%</div>
-                            <span class="text-[11px] text-slate-500 mt-1 block">Higher crossover in Region A</span>
-                        </div>
-                        <div class="glass-card p-5 rounded-2xl">
-                            <span class="block text-xs font-mono uppercase text-slate-500 tracking-wider mb-1">Regression Model</span>
-                            <div class="text-xl font-semibold text-slate-900 font-mono tracking-tight mt-1">y = mx + c</div>
-                            <span class="text-[11px] text-slate-500 mt-1 block">Least-Squares Fit</span>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
-        <!-- Critical Points & Highlight Section -->
-        <section id="critical-points" class="py-20 bg-white border-b border-slate-200/60">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                
-                <div class="flex flex-col md:flex-row md:items-end justify-between mb-14 gap-4 scroll-reveal">
-                    <div>
-                        <span class="text-xs font-mono text-brand-700 uppercase tracking-widest block mb-2">Key Research Insights</span>
-                        <h2 class="text-2xl sm:text-3xl font-light text-slate-900 tracking-tight">
-                            Critical Points & <span class="font-semibold text-brand-900">Core Findings</span>
-                        </h2>
-                    </div>
-                    <p class="text-sm text-slate-500 max-w-md">
-                        Genetic recombination frequency is not uniformly distributed across physical chromosome lengths during meiotic crossover.
-                    </p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    
-                    <!-- Highlight Card 1 -->
-                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-100 hover:border-brand-200 transition-all hover:shadow-md group scroll-reveal">
-                        <div class="w-10 h-10 rounded-xl bg-brand-100 text-brand-800 flex items-center justify-center mb-6 font-mono text-sm font-semibold group-hover:bg-brand-900 group-hover:text-white transition-colors">
-                            01
-                        </div>
-                        <h3 class="text-lg font-semibold text-slate-900 mb-2">Non-Uniform Rate Distribution</h3>
-                        <p class="text-sm text-slate-600 leading-relaxed">
-                            Physical length measured in megabases (<span class="font-mono text-xs">Mb</span>) does not correspond linearly to genetic distance in centimorgans (<span class="font-mono text-xs">cM</span>). Recombination hotspots create distinct variance across intervals.
-                        </p>
-                    </div>
-
-                    <!-- Highlight Card 2 -->
-                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-100 hover:border-brand-200 transition-all hover:shadow-md group scroll-reveal">
-                        <div class="w-10 h-10 rounded-xl bg-brand-100 text-brand-800 flex items-center justify-center mb-6 font-mono text-sm font-semibold group-hover:bg-brand-900 group-hover:text-white transition-colors">
-                            02
-                        </div>
-                        <h3 class="text-lg font-semibold text-slate-900 mb-2">Region A Hyper-Recombination</h3>
-                        <p class="text-sm text-slate-600 leading-relaxed">
-                            The "Female CEN to 120" region exhibits a significantly steeper slope (<span class="font-mono text-xs font-bold text-brand-700">m = 1.40 cM/Mb</span>), reflecting heightened crossover activity compared to the distal tail.
-                        </p>
-                    </div>
-
-                    <!-- Highlight Card 3 -->
-                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-100 hover:border-brand-200 transition-all hover:shadow-md group scroll-reveal">
-                        <div class="w-10 h-10 rounded-xl bg-brand-100 text-brand-800 flex items-center justify-center mb-6 font-mono text-sm font-semibold group-hover:bg-brand-900 group-hover:text-white transition-colors">
-                            03
-                        </div>
-                        <h3 class="text-lg font-semibold text-slate-900 mb-2">Intercept Baseline Shift</h3>
-                        <p class="text-sm text-slate-600 leading-relaxed">
-                            The intercept discrepancy (<span class="font-mono text-xs text-brand-800">c₁ = -63.69</span> vs <span class="font-mono text-xs text-brand-800">c₂ = -22.64</span>) captures the cumulative baseline offset and physical separation of local chromosomal anchor windows.
-                        </p>
-                    </div>
-
-                </div>
-
-            </div>
-        </section>
-
-        <!-- Visual Infographic Comparison Section -->
-        <section id="infographic" class="py-20 bg-slate-50/50 border-b border-slate-200/60">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                
-                <div class="text-center max-w-2xl mx-auto mb-16 scroll-reveal">
-                    <span class="text-xs font-mono text-brand-700 uppercase tracking-widest block mb-2">Comparative Infographic</span>
-                    <h2 class="text-2xl sm:text-3xl font-light text-slate-900 tracking-tight">
-                        Sub-Region <span class="font-semibold text-brand-900">Linear Regression Models</span>
-                    </h2>
-                    <p class="text-sm text-slate-500 mt-2">
-                        Comparing the mathematical equations derived from first-order least-squares fitting.
-                    </p>
-                </div>
-
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
-                    
-                    <!-- Region A Infographic Card -->
-                    <div class="bg-white rounded-3xl p-8 border border-slate-200/80 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow scroll-reveal">
-                        <div>
-                            <div class="flex items-center justify-between mb-6">
-                                <span class="px-3 py-1 rounded-full bg-brand-100 text-brand-900 text-xs font-mono font-semibold">Region A</span>
-                                <span class="text-xs text-slate-400 font-mono">Female CEN to 120</span>
-                            </div>
-                            
-                            <h3 class="text-xl font-medium text-slate-900 mb-2">Female Centromere to Position 120</h3>
-                            <p class="text-xs text-slate-500 leading-relaxed mb-6">
-                                Spans from -0.70 Mb to 110.14 Mb along Chromosome 12. Shows high rate of genetic interchange.
-                            </p>
-
-                            <!-- Equation Box -->
-                            <div class="p-4 rounded-2xl bg-brand-50/50 border border-brand-100 mb-6 text-center">
-                                <span class="block text-xs font-mono text-brand-800 uppercase tracking-wider mb-1">Regression Equation</span>
-                                <div class="text-2xl sm:text-3xl font-mono font-bold text-brand-950">y = 1.40x - 63.69</div>
-                            </div>
-
-                            <!-- Visual Rate Bar -->
-                            <div class="space-y-4">
-                                <div>
-                                    <div class="flex justify-between text-xs font-mono mb-1">
-                                        <span class="text-slate-600">Recombination Rate (Slope m)</span>
-                                        <span class="font-bold text-brand-800">1.40 cM/Mb</span>
-                                    </div>
-                                    <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
-                                        <div class="bg-brand-600 h-full rounded-full" style="width: 85%;"></div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="flex justify-between text-xs font-mono mb-1">
-                                        <span class="text-slate-600">Map Intercept (c)</span>
-                                        <span class="font-bold text-slate-700">-63.69</span>
-                                    </div>
-                                    <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
-                                        <div class="bg-slate-400 h-full rounded-full" style="width: 40%;"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mt-8 pt-6 border-t border-slate-100 flex items-center gap-3">
-                            <i data-lucide="zap" class="w-4 h-4 text-brand-600 flex-shrink-0"></i>
-                            <span class="text-xs text-slate-600">Characterized by steeper segment slopes and dense crossover frequency.</span>
-                        </div>
-                    </div>
-
-                    <!-- Region B Infographic Card -->
-                    <div class="bg-white rounded-3xl p-8 border border-slate-200/80 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow scroll-reveal">
-                        <div>
-                            <div class="flex items-center justify-between mb-6">
-                                <span class="px-3 py-1 rounded-full bg-slate-100 text-slate-800 text-xs font-mono font-semibold">Region B</span>
-                                <span class="text-xs text-slate-400 font-mono">Female 120 to End</span>
-                            </div>
-                            
-                            <h3 class="text-xl font-medium text-slate-900 mb-2">Female Position 120 to Telomere End</h3>
-                            <p class="text-xs text-slate-500 leading-relaxed mb-6">
-                                Spans from 106.30 Mb to 150.73 Mb near the telomeric end of Chromosome 12.
-                            </p>
-
-                            <!-- Equation Box -->
-                            <div class="p-4 rounded-2xl bg-slate-100/70 border border-slate-200 mb-6 text-center">
-                                <span class="block text-xs font-mono text-slate-600 uppercase tracking-wider mb-1">Regression Equation</span>
-                                <div class="text-2xl sm:text-3xl font-mono font-bold text-slate-900">y = 0.95x - 22.64</div>
-                            </div>
-
-                            <!-- Visual Rate Bar -->
-                            <div class="space-y-4">
-                                <div>
-                                    <div class="flex justify-between text-xs font-mono mb-1">
-                                        <span class="text-slate-600">Recombination Rate (Slope m)</span>
-                                        <span class="font-bold text-slate-800">0.95 cM/Mb</span>
-                                    </div>
-                                    <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
-                                        <div class="bg-slate-600 h-full rounded-full" style="width: 58%;"></div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="flex justify-between text-xs font-mono mb-1">
-                                        <span class="text-slate-600">Map Intercept (c)</span>
-                                        <span class="font-bold text-slate-700">-22.64</span>
-                                    </div>
-                                    <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
-                                        <div class="bg-slate-400 h-full rounded-full" style="width: 65%;"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mt-8 pt-6 border-t border-slate-100 flex items-center gap-3">
-                            <i data-lucide="trending-down" class="w-4 h-4 text-slate-500 flex-shrink-0"></i>
-                            <span class="text-xs text-slate-600">Flatter slope signifies lower crossover event probability per megabase.</span>
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
-        </section>
-
-        <!-- Interactive Chart Section -->
-        <section id="interactive-map" class="py-20 bg-white border-b border-slate-200/60">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                
-                <div class="flex flex-col lg:flex-row lg:items-center justify-between mb-10 gap-6 scroll-reveal">
-                    <div>
-                        <span class="text-xs font-mono text-brand-700 uppercase tracking-widest block mb-2">Interactive Visualization</span>
-                        <h2 class="text-2xl sm:text-3xl font-light text-slate-900 tracking-tight">
-                            Digitized Data & <span class="font-semibold text-brand-900">Fitted Regression Lines</span>
-                        </h2>
-                    </div>
-
-                    <!-- Chart Controls Toggle -->
-                    <div class="inline-flex p-1 bg-slate-100 rounded-xl border border-slate-200/80 text-xs font-medium self-start lg:self-auto">
-                        <button id="btn-all" onclick="updateChartMode('all')" class="px-4 py-2 rounded-lg bg-white shadow-sm text-slate-900 font-semibold transition-all">
-                            Combined View
-                        </button>
-                        <button id="btn-regionA" onclick="updateChartMode('regionA')" class="px-4 py-2 rounded-lg text-slate-600 hover:text-slate-900 transition-all">
-                            Region A
-                        </button>
-                        <button id="btn-regionB" onclick="updateChartMode('regionB')" class="px-4 py-2 rounded-lg text-slate-600 hover:text-slate-900 transition-all">
-                            Region B
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Main Chart Canvas Container -->
-                <div class="bg-slate-50 p-4 sm:p-8 rounded-3xl border border-slate-200/80 shadow-inner scroll-reveal">
-                    <div class="relative w-full h-[380px] sm:h-[480px]">
-                        <canvas id="recombinationChart"></canvas>
-                    </div>
-                    
-                    <div class="mt-6 flex flex-wrap items-center justify-between text-xs text-slate-500 font-mono gap-4 pt-4 border-t border-slate-200/60">
-                        <div class="flex items-center gap-6">
-                            <span class="flex items-center gap-2">
-                                <span class="w-3 h-3 rounded-full bg-emerald-800 inline-block"></span> Region A Data Points
-                            </span>
-                            <span class="flex items-center gap-2">
-                                <span class="w-3 h-3 rounded-full bg-emerald-400 inline-block"></span> Region B Data Points
-                            </span>
-                        </div>
-                        <div>
-                            X: Physical Position (Mb) | Y: Genetic Distance (cM)
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-        <!-- Interactive Calculator & Hotspot Simulator -->
-        <section id="calculator" class="py-20 bg-slate-50/50 border-b border-slate-200/60">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                
-                <div class="max-w-4xl mx-auto">
-                    <div class="text-center mb-12 scroll-reveal">
-                        <span class="text-xs font-mono text-brand-700 uppercase tracking-widest block mb-2">Interactive Tool</span>
-                        <h2 class="text-2xl sm:text-3xl font-light text-slate-900 tracking-tight">
-                            Genetic Distance <span class="font-semibold text-brand-900">Predictor</span>
-                        </h2>
-                        <p class="text-sm text-slate-500 mt-2">
-                            Enter any physical position (Mb) along Chromosome 12 to calculate predicted centimorgans (cM) based on Shadman Shakib's regression models.
-                        </p>
-                    </div>
-
-                    <div class="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-sm scroll-reveal">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                            
-                            <!-- Input Form -->
-                            <div class="space-y-6">
-                                <div>
-                                    <label class="block text-xs font-mono uppercase text-slate-600 mb-2">Select Chromosomal Region</label>
-                                    <select id="calcRegion" onchange="calculateGeneticDistance()" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-sm text-slate-800 font-medium focus:ring-2 focus:ring-brand-500 focus:outline-none transition-all">
-                                        <option value="A">Region A: Female CEN to 120 (y = 1.40x - 63.69)</option>
-                                        <option value="B">Region B: Female 120 to End (y = 0.95x - 22.64)</option>
-                                    </select>
-                                </div>
-
-                                <div>
-                                    <div class="flex justify-between items-center mb-2">
-                                        <label class="block text-xs font-mono uppercase text-slate-600">Physical Position (x in Mb)</label>
-                                        <span id="sliderValueDisplay" class="text-xs font-mono font-bold text-brand-800">50.00 Mb</span>
-                                    </div>
-                                    <input type="range" id="mbSlider" min="0" max="150" step="0.5" value="50" oninput="syncMbInput(this.value)" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-brand-800">
-                                    <div class="flex justify-between text-[10px] font-mono text-slate-400 mt-1">
-                                        <span>0 Mb</span>
-                                        <span>75 Mb</span>
-                                        <span>150 Mb</span>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <label class="block text-xs font-mono uppercase text-slate-600 mb-2">Manual Mb Input</label>
-                                    <input type="number" id="mbInput" value="50.00" step="0.1" oninput="syncSliderInput(this.value)" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-sm font-mono text-slate-900 focus:ring-2 focus:ring-brand-500 focus:outline-none transition-all">
-                                </div>
-                            </div>
-
-                            <!-- Output Result Card -->
-                            <div class="bg-brand-950 text-white rounded-2xl p-6 sm:p-8 flex flex-col justify-between h-full relative overflow-hidden">
-                                <div class="absolute -right-8 -bottom-8 w-40 h-40 bg-brand-800/30 rounded-full blur-2xl pointer-events-none"></div>
-
-                                <div>
-                                    <span class="text-xs font-mono text-brand-300 uppercase tracking-wider block mb-1">Predicted Genetic Distance</span>
-                                    <div id="calcResult" class="text-4xl sm:text-5xl font-mono font-bold text-brand-300 my-4">
-                                        6.31 <span class="text-base font-sans font-normal text-brand-200">cM</span>
-                                    </div>
-                                    <p id="calcFormulaText" class="text-xs font-mono text-brand-200/80 bg-brand-900/60 p-3 rounded-lg border border-brand-800/50">
-                                        y = 1.40 × (50.00) - 63.69 = 6.31 cM
-                                    </p>
-                                </div>
-
-                                <div class="mt-8 pt-4 border-t border-brand-900 flex items-center justify-between text-xs text-brand-200">
-                                    <span>Meiotic Crossover Rate</span>
-                                    <span id="rateTag" class="font-mono font-semibold text-brand-400">1.40 cM per Mb</span>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
-        </section>
-
-        <!-- Extracted Data Matrix Section -->
-        <section class="py-20 bg-white border-b border-slate-200/60">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                
-                <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4 scroll-reveal">
-                    <div>
-                        <span class="text-xs font-mono text-brand-700 uppercase tracking-widest block mb-2">Source Data</span>
-                        <h2 class="text-2xl sm:text-3xl font-light text-slate-900 tracking-tight">
-                            Digitized Data <span class="font-semibold text-brand-900">Points Table</span>
-                        </h2>
-                    </div>
-                    <p class="text-sm text-slate-500 max-w-md">
-                        Extracted coordinates via computer-aided digitization software from Figure 15 of the Human Genome Project study.
-                    </p>
-                </div>
-
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 scroll-reveal">
-                    
-                    <!-- Region A Table -->
-                    <div class="border border-slate-200 rounded-2xl overflow-hidden bg-slate-50/50">
-                        <div class="p-4 bg-slate-100/80 border-b border-slate-200 flex justify-between items-center">
-                            <span class="text-xs font-mono font-bold text-brand-900 uppercase">Region A: Female CEN to 120 (20 Points)</span>
-                            <span class="text-[11px] font-mono text-slate-500">y = 1.40x - 63.69</span>
-                        </div>
-                        <div class="max-h-72 overflow-y-auto">
-                            <table class="w-full text-left text-xs font-mono">
-                                <thead class="bg-slate-100 text-slate-600 sticky top-0">
-                                    <tr>
-                                        <th class="p-3 border-b">Position (Mb)</th>
-                                        <th class="p-3 border-b">Distance (cM)</th>
-                                        <th class="p-3 border-b">Predicted (cM)</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tableRegionA" class="divide-y divide-slate-200/60 text-slate-700">
-                                    <!-- Populated via JS -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <!-- Region B Table -->
-                    <div class="border border-slate-200 rounded-2xl overflow-hidden bg-slate-50/50">
-                        <div class="p-4 bg-slate-100/80 border-b border-slate-200 flex justify-between items-center">
-                            <span class="text-xs font-mono font-bold text-slate-800 uppercase">Region B: Female 120 to End (18 Points)</span>
-                            <span class="text-[11px] font-mono text-slate-500">y = 0.95x - 22.64</span>
-                        </div>
-                        <div class="max-h-72 overflow-y-auto">
-                            <table class="w-full text-left text-xs font-mono">
-                                <thead class="bg-slate-100 text-slate-600 sticky top-0">
-                                    <tr>
-                                        <th class="p-3 border-b">Position (Mb)</th>
-                                        <th class="p-3 border-b">Distance (cM)</th>
-                                        <th class="p-3 border-b">Predicted (cM)</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tableRegionB" class="divide-y divide-slate-200/60 text-slate-700">
-                                    <!-- Populated via JS -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
-        </section>
-
-        <!-- Discussion & Biological Takeaways Section -->
-        <section class="py-20 bg-slate-50/50">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                
-                <div class="max-w-3xl mx-auto text-center mb-16 scroll-reveal">
-                    <span class="text-xs font-mono text-brand-700 uppercase tracking-widest block mb-2">Biological Context</span>
-                    <h2 class="text-2xl sm:text-3xl font-light text-slate-900 tracking-tight">
-                        Discussion & <span class="font-semibold text-brand-900">Conclusions</span>
-                    </h2>
-                </div>
-
-                <div class="max-w-4xl mx-auto space-y-6 scroll-reveal">
-                    
-                    <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200/80 shadow-sm">
-                        <h3 class="text-lg font-medium text-slate-900 mb-3 flex items-center gap-2">
-                            <i data-lucide="dna" class="w-5 h-5 text-brand-700"></i>
-                            <span>Recombination Rate Variation Across Meiosis</span>
-                        </h3>
-                        <p class="text-sm text-slate-600 leading-relaxed">
-                            The fitted line slope directly quantifies the local recombination rate in cM/Mb. The steeper slope in the <em>Female CEN to 120</em> segment demonstrates that female meiotic crossovers occur with greater probability per physical megabase in this region compared to the terminal <em>120 to End</em> segment.
-                        </p>
-                    </div>
-
-                    <div class="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200/80 shadow-sm">
-                        <h3 class="text-lg font-medium text-slate-900 mb-3 flex items-center gap-2">
-                            <i data-lucide="map-pin" class="w-5 h-5 text-brand-700"></i>
-                            <span>Centromeric & Telomeric Structural Anchors</span>
-                        </h3>
-                        <p class="text-sm text-slate-600 leading-relaxed">
-                            Interpreting the y-intercepts reveals baseline map offsets prior to cumulative recombination accumulation. Discrepancies between physical distance (Mb) and genetic distance (cM) highlight how chromosome architecture influences crossover placement during human female meiosis.
-                        </p>
-                    </div>
-
-                    <!-- PDF Citation Banner -->
-                    <div class="p-6 rounded-2xl bg-brand-950 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-6 shadow-md">
-                        <div>
-                            <span class="text-xs font-mono text-brand-300 uppercase tracking-wider block mb-1">Academic Publication Reference</span>
-                            <h4 class="text-base font-semibold text-white">Shadman Shakib (22136032)</h4>
-                            <p class="text-xs text-brand-200 mt-1">Department of Biotechnology, BRAC University · Human Genome Project Analysis</p>
-                        </div>
-                        <a href="https://drive.google.com/file/d/1tX6p-fAlWvwyNXUu1x_SKmBB829KhrHy/view?usp=sharing" target="_blank" rel="noopener noreferrer" 
-                           class="px-5 py-2.5 rounded-full bg-brand-500 hover:bg-brand-400 text-brand-950 text-xs font-bold tracking-wide transition-all whitespace-nowrap self-start sm:self-auto flex items-center gap-2">
-                            <span>Open PDF Report</span>
-                            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-                        </a>
-                    </div>
-
-                </div>
-
-            </div>
-        </section>
-    </main>
-
-    <!-- Minimalist Footer -->
-    <footer class="bg-white border-t border-slate-200/80 py-12 text-slate-500 text-xs font-mono">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
-            <div class="flex items-center gap-3">
-                <div class="w-6 h-6 rounded bg-brand-900 text-brand-300 flex items-center justify-center font-bold text-xs">12</div>
-                <span>Chromosome 12 Recombination Rates Analysis</span>
-            </div>
+    <section id="overview" class="pt-36 pb-20 md:pt-44 md:pb-28 px-6 max-w-7xl mx-auto">
+        <div class="flex flex-col items-center text-center max-w-4xl mx-auto">
             
-            <div>
-                Authored by Shadman Shakib · BRAC University
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full green-badge text-xs font-semibold uppercase tracking-wider mb-6 animate-fade-in">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                Human Genome Project • BTE410 Research Analysis
             </div>
 
-            <div>
-                Reference: International Human Genome Sequencing Consortium (2001)
+            <h1 class="font-display text-4xl sm:text-5xl md:text-6xl font-extralight tracking-tight text-slate-900 leading-[1.15] mb-6">
+                Decoupling Physical & Genetic Distance in <span class="font-semibold green-gradient-text">Human Chromosome 12</span>
+            </h1>
+
+            <p class="text-base sm:text-lg md:text-xl text-slate-600 font-light max-w-2xl leading-relaxed mb-10">
+                An interactive exploration of meiotic crossover dynamics in female meiosis, proving a <strong class="font-medium text-slate-900">46.46% acceleration</strong> in recombination velocity across distal chromosomal domains.
+            </p>
+
+            <!-- Dual Action CTAs -->
+            <div class="flex flex-wrap items-center justify-center gap-4 mb-14">
+                <a href="https://drive.google.com/file/d/1xpuz_Is4ZE3pn8xgG0l4mUr_orm1mT4n/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-3 px-7 py-3.5 rounded-full text-sm font-semibold text-white bg-emerald-900 hover:bg-emerald-800 shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5">
+                    <i data-lucide="file-text" class="w-4 h-4"></i>
+                    <span>Read Complete Review Paper</span>
+                    <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+                </a>
+                <a href="#regression-model" class="inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-semibold text-slate-700 bg-white border border-slate-200 hover:border-emerald-300 hover:text-emerald-800 hover:bg-emerald-50/50 transition-all shadow-xs">
+                    <i data-lucide="sliders" class="w-4 h-4 text-emerald-600"></i>
+                    <span>Explore Interactive Model</span>
+                </a>
+            </div>
+
+            <!-- Author & Institutional Attribution Card -->
+            <div class="w-full max-w-3xl bg-white border border-slate-100 rounded-2xl p-6 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-6 text-left">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-full bg-emerald-100 border border-emerald-200 flex items-center justify-center text-emerald-800 font-display font-bold text-lg">
+                        SS
+                    </div>
+                    <div>
+                        <div class="text-sm font-semibold text-slate-900">Shadman Shakib <span class="text-xs font-normal text-slate-500">(ID: 22136032)</span></div>
+                        <div class="text-xs text-slate-500 font-light">Department of Biotechnology • BRAC University</div>
+                        <div class="text-[11px] text-emerald-700 mt-0.5">shadman.shakib1@g.bracu.ac.bd</div>
+                    </div>
+                </div>
+                <div class="w-full sm:w-auto pt-4 sm:pt-0 border-t sm:border-t-0 sm:border-l border-slate-100 sm:pl-6">
+                    <div class="text-[11px] uppercase tracking-wider text-slate-400 font-semibold mb-1">Evaluated By</div>
+                    <div class="text-xs font-medium text-slate-800">Dr. Mahdi Moosa, PhD</div>
+                    <div class="text-[11px] text-slate-500">Assistant Professor, BRAC University</div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="py-12 bg-white border-y border-slate-100">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                <div class="p-6 rounded-2xl bg-slate-50/70 border border-slate-100/80 card-hover">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Region A Slope</span>
+                        <div class="p-1.5 rounded-lg bg-emerald-100/60 text-emerald-700">
+                            <i data-lucide="trending-up" class="w-4 h-4"></i>
+                        </div>
+                    </div>
+                    <div class="font-display text-3xl font-semibold text-slate-900 mb-1">0.99 <span class="text-sm font-normal text-slate-500">cM/Mb</span></div>
+                    <p class="text-xs text-slate-500 leading-relaxed">Pericentromeric to Mid-arm (<span class="font-medium text-slate-700">Female CEN to 120</span>)</p>
+                </div>
+
+                <div class="p-6 rounded-2xl bg-slate-50/70 border border-slate-100/80 card-hover">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Region B Slope</span>
+                        <div class="p-1.5 rounded-lg bg-emerald-100/60 text-emerald-700">
+                            <i data-lucide="zap" class="w-4 h-4"></i>
+                        </div>
+                    </div>
+                    <div class="font-display text-3xl font-semibold text-emerald-700 mb-1">1.45 <span class="text-sm font-normal text-slate-500">cM/Mb</span></div>
+                    <p class="text-xs text-slate-500 leading-relaxed">Distal Telomeric Domain (<span class="font-medium text-slate-700">Female 120 to End</span>)</p>
+                </div>
+
+                <div class="p-6 rounded-2xl bg-emerald-900 text-white rounded-2xl shadow-md card-hover relative overflow-hidden">
+                    <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-emerald-800/40 rounded-full blur-xl pointer-events-none"></div>
+                    <div class="flex items-center justify-between mb-3 relative z-10">
+                        <span class="text-xs font-semibold uppercase tracking-wider text-emerald-200">Recombination Rate Delta</span>
+                        <div class="p-1.5 rounded-lg bg-emerald-800/80 text-emerald-300">
+                            <i data-lucide="percent" class="w-4 h-4"></i>
+                        </div>
+                    </div>
+                    <div class="font-display text-3xl font-bold text-emerald-300 mb-1 relative z-10">+46.46%</div>
+                    <p class="text-xs text-emerald-100/80 leading-relaxed relative z-10">Significant velocity jump from pericentromeric to distal telomeric locus</p>
+                </div>
+
+                <div class="p-6 rounded-2xl bg-slate-50/70 border border-slate-100/80 card-hover">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Regression Accuracy</span>
+                        <div class="p-1.5 rounded-lg bg-emerald-100/60 text-emerald-700">
+                            <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+                        </div>
+                    </div>
+                    <div class="font-display text-3xl font-semibold text-slate-900 mb-1">R² ≈ 0.985</div>
+                    <p class="text-xs text-slate-500 leading-relaxed">High goodness-of-fit across OLS linear models (Region A: 0.986 | Region B: 0.984)</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="interactive-map" class="py-24 px-6 max-w-7xl mx-auto">
+        <div class="mb-12 text-center max-w-3xl mx-auto">
+            <span class="text-xs font-semibold text-emerald-700 uppercase tracking-widest mb-2 block">Spatial Chromosomal Architecture</span>
+            <h2 class="font-display text-3xl sm:text-4xl font-light text-slate-900 mb-4">Interactive Chromosome 12 Domain Navigator</h2>
+            <p class="text-sm sm:text-base text-slate-600 font-light">Hover or tap on the chromosomal segments below to inspect regional physical spans, crossover frequencies, and biological features.</p>
+        </div>
+
+        <div class="bg-white border border-slate-200/80 rounded-3xl p-6 sm:p-10 shadow-sm">
+            <!-- Chromosome Schematic Visualizer -->
+            <div class="mb-10">
+                <div class="flex items-center justify-between text-xs text-slate-400 font-medium mb-3">
+                    <span>0 Mb (p-Telomere)</span>
+                    <span>Centromere (~35.5 - 38.5 Mb)</span>
+                    <span>150.7 Mb (q-Telomere)</span>
+                </div>
+
+                <!-- Visual Bar Representation of Chromosome 12 -->
+                <div class="relative w-full h-14 bg-slate-100 rounded-2xl p-1.5 flex items-center gap-1 overflow-hidden border border-slate-200 shadow-inner">
+                    
+                    <!-- Short Arm (12p) -->
+                    <div id="segment-12p" onclick="selectSegment('12p')" class="h-full w-[24%] bg-slate-300 hover:bg-slate-400/80 rounded-l-xl transition-all cursor-pointer flex items-center justify-center text-[11px] font-semibold text-slate-700 group relative">
+                        <span>12p Arm (0-35.5 Mb)</span>
+                    </div>
+
+                    <!-- Centromere -->
+                    <div id="segment-cen" onclick="selectSegment('cen')" class="h-full w-[4%] bg-slate-400/60 border-x-2 border-dashed border-slate-400 transition-all cursor-pointer flex items-center justify-center text-[9px] font-bold text-slate-600 uppercase tracking-tighter">
+                        CEN
+                    </div>
+
+                    <!-- Region A (Female CEN to 120) -->
+                    <div id="segment-regionA" onclick="selectSegment('regionA')" class="h-full w-[44%] bg-emerald-600/90 hover:bg-emerald-600 transition-all cursor-pointer flex items-center justify-center text-xs font-semibold text-white shadow-xs">
+                        <span>Region A (40.07 - 110.14 Mb)</span>
+                    </div>
+
+                    <!-- Region B (Female 120 to End) -->
+                    <div id="segment-regionB" onclick="selectSegment('regionB')" class="h-full w-[28%] bg-emerald-900 hover:bg-emerald-950 transition-all cursor-pointer flex items-center justify-center text-xs font-semibold text-emerald-200 rounded-r-xl shadow-xs">
+                        <span>Region B (106.3 - 150.73 Mb)</span>
+                    </div>
+
+                </div>
+                <div class="flex items-center justify-between text-[11px] text-slate-400 mt-2 font-mono">
+                    <span>12p (Short Arm)</span>
+                    <span>12q11 - 12q23 (Proximal Long Arm)</span>
+                    <span>12q24 (Distal Long Arm)</span>
+                </div>
+            </div>
+
+            <!-- Dynamic Segment Details Box -->
+            <div id="segment-details-box" class="bg-emerald-50/50 border border-emerald-100 rounded-2xl p-6 transition-all duration-300">
+                <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                    <div class="space-y-1">
+                        <div id="detail-tag" class="inline-block text-[11px] font-bold uppercase tracking-wider text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-md">
+                            Selected Region: Region A
+                        </div>
+                        <h3 id="detail-title" class="font-display text-2xl font-semibold text-slate-900">Female CEN to 120 Locus</h3>
+                        <p id="detail-desc" class="text-sm text-slate-600 font-light max-w-xl">
+                            Proximal segment covering 40.07 Mb to 110.14 Mb. Characterized by a steady linear slope of <strong class="font-semibold text-slate-800">0.99 cM/Mb</strong> due to centromeric crossover suppression effects.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 w-full md:w-auto">
+                        <div class="bg-white p-3.5 rounded-xl border border-slate-100 shadow-2xs">
+                            <span class="text-[10px] text-slate-400 uppercase font-semibold block">Physical Span</span>
+                            <span id="detail-span" class="text-base font-semibold text-slate-800">70.07 Mb</span>
+                        </div>
+                        <div class="bg-white p-3.5 rounded-xl border border-slate-100 shadow-2xs">
+                            <span class="text-[10px] text-slate-400 uppercase font-semibold block">Recombination Rate</span>
+                            <span id="detail-rate" class="text-base font-semibold text-emerald-700">0.99 cM/Mb</span>
+                        </div>
+                        <div class="bg-white p-3.5 rounded-xl border border-slate-100 shadow-2xs col-span-2 sm:col-span-1">
+                            <span class="text-[10px] text-slate-400 uppercase font-semibold block">OLS Equation</span>
+                            <span id="detail-eq" class="text-xs font-mono font-semibold text-slate-800">y = 0.99x - 32.33</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="regression-model" class="py-24 bg-slate-900 text-white relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            
+            <div class="max-w-3xl mb-12">
+                <span class="text-xs font-semibold text-emerald-400 uppercase tracking-widest block mb-2">Ordinary Least-Squares (OLS) Analysis</span>
+                <h2 class="font-display text-3xl sm:text-4xl font-extralight tracking-tight mb-4">
+                    Linear Regression Sandbox & Predictor
+                </h2>
+                <p class="text-slate-400 text-sm sm:text-base font-light">
+                    Compare the empirical coordinate pairs (digitized via WebPlotDigitizer) against fitted regression lines ($y = mx + c$). Test specific physical genomic locations to calculate predicted genetic distances.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                
+                <!-- Chart Canvas Container (8 cols) -->
+                <div class="lg:col-span-8 bg-slate-800/80 border border-slate-700/60 rounded-3xl p-6 shadow-xl">
+                    <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+                        <div class="flex items-center gap-2">
+                            <div class="w-3 h-3 rounded-full bg-emerald-500"></div>
+                            <span class="text-xs font-medium text-slate-300">Chromosome 12 Female Map</span>
+                        </div>
+                        
+                        <!-- Toggle Controls -->
+                        <div class="flex items-center gap-2 bg-slate-900/80 p-1 rounded-xl border border-slate-700 text-xs">
+                            <button id="btn-show-all" onclick="updateChartFilter('all')" class="px-3 py-1.5 rounded-lg bg-emerald-700 text-white font-medium transition-all">All Data</button>
+                            <button id="btn-show-regA" onclick="updateChartFilter('regA')" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition-all">Region A</button>
+                            <button id="btn-show-regB" onclick="updateChartFilter('regB')" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition-all">Region B</button>
+                        </div>
+                    </div>
+
+                    <div class="relative w-full h-[360px] sm:h-[420px]">
+                        <canvas id="regressionChart"></canvas>
+                    </div>
+                    
+                    <div class="mt-4 pt-4 border-t border-slate-700/60 flex items-center justify-between text-xs text-slate-400">
+                        <span>X-axis: Physical Distance (Mb)</span>
+                        <span>Y-axis: Genetic Distance (cM)</span>
+                    </div>
+                </div>
+
+                <!-- Interactive Predictor & Parameter Calculator (4 cols) -->
+                <div class="lg:col-span-4 space-y-6">
+                    
+                    <!-- Calculator Card -->
+                    <div class="bg-slate-800/90 border border-slate-700/80 rounded-3xl p-6 shadow-lg">
+                        <div class="flex items-center gap-2 text-emerald-400 font-semibold text-xs uppercase tracking-wider mb-4">
+                            <i data-lucide="calculator" class="w-4 h-4"></i>
+                            Genetic Distance Predictor
+                        </div>
+
+                        <label class="block text-xs font-medium text-slate-300 mb-2">
+                            Select Physical Position (<span id="calc-mb-val" class="text-emerald-400 font-bold font-mono">80.0</span> Mb):
+                        </label>
+
+                        <input type="range" id="mb-slider" min="40.0" max="150.7" step="0.5" value="80.0" oninput="calculateGeneticDistance(this.value)" class="w-full accent-emerald-500 bg-slate-700 h-2 rounded-lg cursor-pointer mb-6">
+
+                        <div class="space-y-4">
+                            <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-700">
+                                <div class="text-[11px] uppercase tracking-wider text-slate-400 mb-1">Active Region Model</div>
+                                <div id="calc-region-name" class="font-semibold text-emerald-400 text-sm">Region A (Female CEN to 120)</div>
+                                <div id="calc-eq-display" class="text-xs text-slate-400 font-mono mt-0.5">Equation: y = 0.99x - 32.33</div>
+                            </div>
+
+                            <div class="p-4 rounded-2xl bg-emerald-950/60 border border-emerald-800/60 flex items-center justify-between">
+                                <div>
+                                    <span class="text-[11px] text-emerald-300/80 uppercase font-medium block">Predicted Distance</span>
+                                    <span id="calc-cm-result" class="text-2xl font-bold font-display text-emerald-300">46.87 cM</span>
+                                </div>
+                                <div class="p-2 bg-emerald-900/60 rounded-xl text-emerald-400">
+                                    <i data-lucide="git-commit" class="w-5 h-5"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 text-[11px] text-slate-400 leading-relaxed font-light">
+                            *Note: Extrapolations near centromere yield negative linear offsets due to the mathematical intercept constant required to compensate for proximal crossover suppression.
+                        </div>
+                    </div>
+
+                    <!-- Regional Comparison Table Card -->
+                    <div class="bg-slate-800/90 border border-slate-700/80 rounded-3xl p-6 shadow-lg">
+                        <h4 class="text-sm font-semibold text-slate-200 mb-4">Regression Summary Parameters</h4>
+                        
+                        <div class="space-y-3 text-xs">
+                            <div class="flex items-center justify-between pb-2 border-b border-slate-700/60">
+                                <span class="text-slate-400">Parameter</span>
+                                <span class="text-emerald-400 font-semibold">Region A</span>
+                                <span class="text-emerald-300 font-semibold">Region B</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-slate-400">Slope ($m$)</span>
+                                <span class="font-mono text-slate-200">0.99 cM/Mb</span>
+                                <span class="font-mono text-emerald-400 font-bold">1.45 cM/Mb</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-slate-400">Intercept ($c$)</span>
+                                <span class="font-mono text-slate-200">-32.33</span>
+                                <span class="font-mono text-slate-200">-79.71</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-slate-400">Sample Size ($n$)</span>
+                                <span class="font-mono text-slate-200">19 points</span>
+                                <span class="font-mono text-slate-200">18 points</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-slate-400">R² Fit</span>
+                                <span class="font-mono text-slate-200">0.986</span>
+                                <span class="font-mono text-slate-200">0.984</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <section id="critical-points" class="py-24 px-6 max-w-7xl mx-auto">
+        
+        <div class="text-center max-w-3xl mx-auto mb-16">
+            <span class="text-xs font-semibold text-emerald-700 uppercase tracking-widest mb-2 block">Analytical Insights & Critical Points</span>
+            <h2 class="font-display text-3xl sm:text-4xl font-light text-slate-900 mb-4">
+                Biological Significance of Non-Uniformity
+            </h2>
+            <p class="text-slate-600 text-sm sm:text-base font-light">
+                Why physical distance (Mb) cannot serve as a direct proxy for meiotic crossover likelihood ($cM$).
+            </p>
+        </div>
+
+        <!-- Bento Grid Infographic -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            
+            <!-- Bento Card 1: Recombination Hotspots -->
+            <div class="md:col-span-2 bg-white border border-slate-200/80 rounded-3xl p-8 card-hover flex flex-col justify-between">
+                <div>
+                    <div class="w-10 h-10 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center mb-6">
+                        <i data-lucide="flame" class="w-5 h-5"></i>
+                    </div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-emerald-700 block mb-1">Critical Point 01</span>
+                    <h3 class="font-display text-2xl font-semibold text-slate-900 mb-3">Recombination Hotspot Clustering in Distal 12q</h3>
+                    <p class="text-slate-600 text-sm font-light leading-relaxed mb-6">
+                        The localized rate surge in Region B (1.45 cM/Mb vs 0.99 cM/Mb) is driven by narrow genomic windows known as recombination hotspots. In these regions, crossover frequencies spike up to 100-fold above baseline, regulated by histone methyltransferase binding (e.g., PRDM9 consensus motifs) and open chromatin architecture towards the telomeres.
+                    </p>
+                </div>
+                <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-center gap-4">
+                    <div class="text-2xl font-bold font-display text-emerald-800">+46.46%</div>
+                    <div class="text-xs text-slate-500">Acceleration in crossover probability per physical Mb in the telomeric region compared to proximal regions.</div>
+                </div>
+            </div>
+
+            <!-- Bento Card 2: Sexual Dimorphism -->
+            <div class="bg-gradient-to-br from-emerald-900 to-emerald-950 text-white rounded-3xl p-8 card-hover flex flex-col justify-between">
+                <div>
+                    <div class="w-10 h-10 rounded-2xl bg-emerald-800 text-emerald-300 flex items-center justify-center mb-6">
+                        <i data-lucide="dna" class="w-5 h-5"></i>
+                    </div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-emerald-300 block mb-1">Critical Point 02</span>
+                    <h3 class="font-display text-xl font-semibold mb-3">Female Sexual Dimorphism (Heterochiasmy)</h3>
+                    <p class="text-emerald-100/80 text-sm font-light leading-relaxed">
+                        Human female meiosis exhibits significantly expanded total genetic lengths compared to male meiosis across autosomes. Female crossovers are more distributed along the chromosome, whereas male crossovers cluster predominantly at extreme telomeric tips.
+                    </p>
+                </div>
+                <div class="mt-8 pt-4 border-t border-emerald-800/80 text-xs text-emerald-200/70 font-mono">
+                    Female Map Length > Male Map Length
+                </div>
+            </div>
+
+            <!-- Bento Card 3: Centromeric Suppression -->
+            <div class="bg-white border border-slate-200/80 rounded-3xl p-8 card-hover">
+                <div class="w-10 h-10 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center mb-6">
+                    <i data-lucide="shield-alert" class="w-5 h-5"></i>
+                </div>
+                <span class="text-xs font-bold uppercase tracking-wider text-emerald-700 block mb-1">Critical Point 03</span>
+                <h3 class="font-display text-xl font-semibold text-slate-900 mb-3">Centromeric Suppression Effect</h3>
+                <p class="text-slate-600 text-sm font-light leading-relaxed">
+                    Pericentromeric heterochromatin structurally suppresses meiotic crossing-over to protect chromosome cohesion and prevent aneuploidy. This explains the lower baseline slope in Region A and the negative mathematical intercepts ($c = -32.33$).
+                </p>
+            </div>
+
+            <!-- Bento Card 4: Decoupling Concept -->
+            <div class="md:col-span-2 bg-white border border-slate-200/80 rounded-3xl p-8 card-hover flex flex-col justify-between">
+                <div>
+                    <div class="w-10 h-10 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center mb-6">
+                        <i data-lucide="git-fork" class="w-5 h-5"></i>
+                    </div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-emerald-700 block mb-1">Critical Point 04</span>
+                    <h3 class="font-display text-2xl font-semibold text-slate-900 mb-3">Decoupling Physical (Mb) & Genetic (cM) Coordinates</h3>
+                    <p class="text-slate-600 text-sm font-light leading-relaxed mb-4">
+                        A core finding of the Human Genome Project (Yu et al., 2001) is that physical DNA length does not map linearly to genetic linkage. If crossovers occurred uniformly across the DNA backbone, the chromosome would follow a single uniform slope. Instead, the multi-slope dynamic illustrates that 1 Mb of DNA can hold vastly different biological recombination probabilities depending on chromosomal location.
+                    </p>
+                </div>
+                <div class="flex flex-wrap items-center gap-6 pt-4 border-t border-slate-100 text-xs">
+                    <div>
+                        <span class="text-slate-400 block uppercase text-[10px]">Physical Distance</span>
+                        <span class="font-semibold text-slate-800">Megabases (Mb) = 1,000,000 bp</span>
+                    </div>
+                    <div class="h-8 w-px bg-slate-200 hidden sm:block"></div>
+                    <div>
+                        <span class="text-slate-400 block uppercase text-[10px]">Genetic Distance</span>
+                        <span class="font-semibold text-slate-800">centiMorgans (cM) = 1% Recombination Risk</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+    <section id="raw-data" class="py-24 bg-slate-50 border-t border-slate-200/70">
+        <div class="max-w-7xl mx-auto px-6">
+            
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-10">
+                <div>
+                    <span class="text-xs font-semibold text-emerald-700 uppercase tracking-widest block mb-1">Digitized Dataset</span>
+                    <h2 class="font-display text-3xl font-light text-slate-900">Digitized (Mb, cM) Coordinate Pairs</h2>
+                </div>
+
+                <div class="flex items-center gap-2 bg-white p-1 rounded-2xl border border-slate-200 shadow-xs text-xs font-medium">
+                    <button id="tab-btn-A" onclick="switchTable('A')" class="px-4 py-2 rounded-xl bg-emerald-900 text-white transition-all">Region A (19 points)</button>
+                    <button id="tab-btn-B" onclick="switchTable('B')" class="px-4 py-2 rounded-xl text-slate-600 hover:text-slate-900 transition-all">Region B (18 points)</button>
+                </div>
+            </div>
+
+            <!-- Table Container -->
+            <div class="bg-white border border-slate-200/80 rounded-3xl overflow-hidden shadow-sm">
+                
+                <!-- Table Region A -->
+                <div id="table-regionA" class="overflow-x-auto">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-slate-50 border-b border-slate-200/80 text-slate-500 uppercase tracking-wider font-semibold">
+                            <tr>
+                                <th class="py-4 px-6">Point #</th>
+                                <th class="py-4 px-6">Physical Position (x, Mb)</th>
+                                <th class="py-4 px-6">Genetic Distance (y, cM)</th>
+                                <th class="py-4 px-6">Fitted OLS (y = 0.99x - 32.33)</th>
+                                <th class="py-4 px-6">Residual Delta</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-A" class="divide-y divide-slate-100 font-mono text-slate-700">
+                            <!-- Populated via JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Table Region B -->
+                <div id="table-regionB" class="overflow-x-auto hidden">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-slate-50 border-b border-slate-200/80 text-slate-500 uppercase tracking-wider font-semibold">
+                            <tr>
+                                <th class="py-4 px-6">Point #</th>
+                                <th class="py-4 px-6">Physical Position (x, Mb)</th>
+                                <th class="py-4 px-6">Genetic Distance (y, cM)</th>
+                                <th class="py-4 px-6">Fitted OLS (y = 1.45x - 79.71)</th>
+                                <th class="py-4 px-6">Residual Delta</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-B" class="divide-y divide-slate-100 font-mono text-slate-700">
+                            <!-- Populated via JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <section class="py-20 px-6 max-w-7xl mx-auto border-t border-slate-100">
+        <div class="max-w-4xl mx-auto">
+            <h3 class="font-display text-xl font-semibold text-slate-900 mb-6 flex items-center gap-2">
+                <i data-lucide="book-open" class="w-5 h-5 text-emerald-700"></i>
+                Key Literature & Citations (APA 7th Edition)
+            </h3>
+
+            <div class="space-y-4 text-xs text-slate-600 font-light leading-relaxed">
+                <p class="p-4 rounded-xl bg-slate-50 border border-slate-100">
+                    <strong class="font-medium text-slate-800">International Human Genome Sequencing Consortium. (2001).</strong> Initial sequencing and analysis of the human genome. <em>Nature</em>, 409(6822), 860–921. https://doi.org/10.1038/35057062
+                </p>
+                <p class="p-4 rounded-xl bg-slate-50 border border-slate-100">
+                    <strong class="font-medium text-slate-800">Kong, A., Gudbjartsson, D. F., Sainz, J., et al. (2002).</strong> A high-resolution recombination map of the human genome. <em>Nature Genetics</em>, 31(3), 241–247. https://doi.org/10.1038/ng917
+                </p>
+                <p class="p-4 rounded-xl bg-slate-50 border border-slate-100">
+                    <strong class="font-medium text-slate-800">Myers, S., Bottolo, L., Freeman, C., McVean, G., & Donnelly, P. (2005).</strong> A fine-scale map of recombination rates and hotspots across the human genome. <em>Science</em>, 310(5746), 321–324. https://doi.org/10.1126/science.11117196
+                </p>
+                <p class="p-4 rounded-xl bg-slate-50 border border-slate-100">
+                    <strong class="font-medium text-slate-800">Yu, A., Zhao, C., Fan, Y., et al. (2001).</strong> Comparison of human genetic and sequence-based physical maps. <em>Nature</em>, 409(6822), 951–953. https://doi.org/10.1038/35057185
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 py-12 px-6 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6 text-xs">
+            <div class="flex items-center gap-3">
+                <div class="w-7 h-7 rounded-lg bg-emerald-900 text-emerald-300 font-bold flex items-center justify-center">12</div>
+                <span>© 2023 Shadman Shakib • Department of Biotechnology, BRAC University</span>
+            </div>
+
+            <div class="flex items-center gap-6 text-slate-400">
+                <a href="https://drive.google.com/file/d/1xpuz_Is4ZE3pn8xgG0l4mUr_orm1mT4n/view?usp=sharing" target="_blank" class="hover:text-emerald-400 transition-colors flex items-center gap-1">
+                    <span>Google Drive Document</span>
+                    <i data-lucide="external-link" class="w-3 h-3"></i>
+                </a>
             </div>
         </div>
     </footer>
 
     <script>
-        // Initialize Lucide Icons
-        lucide.createIcons();
-
-        // Raw Extracted Data from Research Paper
+        // Raw Data Sets extracted via WebPlotDigitizer
         const dataRegionA = [
-            { x: -0.70, y: -63.90 },
-            { x: 40.07, y: 2.99 },
-            { x: 43.69, y: 5.99 },
-            { x: 49.98, y: 18.38 },
-            { x: 53.64, y: 22.62 },
-            { x: 56.72, y: 26.30 },
-            { x: 60.36, y: 32.81 },
-            { x: 65.21, y: 35.90 },
-            { x: 68.48, y: 36.34 },
-            { x: 71.86, y: 38.03 },
-            { x: 77.07, y: 43.66 },
-            { x: 81.00, y: 48.41 },
-            { x: 85.53, y: 52.48 },
-            { x: 90.38, y: 56.63 },
-            { x: 93.21, y: 58.05 },
-            { x: 96.98, y: 60.37 },
-            { x: 99.70, y: 64.09 },
-            { x: 105.00, y: 72.44 },
-            { x: 108.20, y: 75.63 },
-            { x: 110.14, y: 78.10 }
+            { x: 40.07, y: 2.99 }, { x: 43.69, y: 5.99 }, { x: 49.98, y: 18.38 }, { x: 53.64, y: 22.62 },
+            { x: 56.72, y: 26.30 }, { x: 60.36, y: 32.81 }, { x: 65.21, y: 35.90 }, { x: 68.48, y: 36.34 },
+            { x: 71.86, y: 38.03 }, { x: 77.07, y: 43.66 }, { x: 81.00, y: 48.41 }, { x: 85.53, y: 52.48 },
+            { x: 90.38, y: 56.63 }, { x: 93.21, y: 58.05 }, { x: 96.98, y: 60.37 }, { x: 99.70, y: 64.09 },
+            { x: 105.00, y: 72.44 }, { x: 108.20, y: 75.63 }, { x: 110.14, y: 78.10 }
         ];
 
         const dataRegionB = [
-            { x: 106.30, y: 74.51 },
-            { x: 109.42, y: 78.90 },
-            { x: 112.56, y: 86.29 },
-            { x: 116.76, y: 90.92 },
-            { x: 120.53, y: 94.07 },
-            { x: 124.57, y: 94.93 },
-            { x: 127.28, y: 99.55 },
-            { x: 129.55, y: 104.81 },
-            { x: 129.90, y: 109.33 },
-            { x: 132.00, y: 114.98 },
-            { x: 134.09, y: 115.12 },
-            { x: 137.90, y: 120.43 },
-            { x: 141.18, y: 123.48 },
-            { x: 143.11, y: 124.05 },
-            { x: 146.14, y: 131.64 },
-            { x: 148.52, y: 134.67 },
-            { x: 150.25, y: 141.24 },
-            { x: 150.73, y: 147.00 }
+            { x: 106.30, y: 74.51 }, { x: 109.42, y: 78.90 }, { x: 112.56, y: 86.29 }, { x: 116.76, y: 90.92 },
+            { x: 120.53, y: 94.07 }, { x: 124.57, y: 94.93 }, { x: 127.28, y: 99.55 }, { x: 129.55, y: 104.81 },
+            { x: 129.90, y: 109.33 }, { x: 132.00, y: 114.98 }, { x: 134.09, y: 115.12 }, { x: 137.90, y: 120.43 },
+            { x: 141.18, y: 123.48 }, { x: 143.11, y: 124.05 }, { x: 146.14, y: 131.64 }, { x: 148.52, y: 134.67 },
+            { x: 150.25, y: 141.24 }, { x: 150.73, y: 139.01 }
         ];
 
-        // Linear Regression Predictions
-        const fitA = (x) => 1.40 * x - 63.69;
-        const fitB = (x) => 0.95 * x - 22.64;
+        // OLS Formula predictions
+        function predictA(x) { return 0.99 * x - 32.33; }
+        function predictB(x) { return 1.45 * x - 79.71; }
 
-        // Populate Raw Data Tables
-        function populateTables() {
-            const tableA = document.getElementById('tableRegionA');
-            const tableB = document.getElementById('tableRegionB');
-
-            tableA.innerHTML = dataRegionA.map(p => `
-                <tr class="hover:bg-brand-50/50 transition-colors">
-                    <td class="p-3 font-medium">${p.x.toFixed(2)}</td>
-                    <td class="p-3 text-brand-900">${p.y.toFixed(2)}</td>
-                    <td class="p-3 text-slate-400">${fitA(p.x).toFixed(2)}</td>
-                </tr>
-            `).join('');
-
-            tableB.innerHTML = dataRegionB.map(p => `
-                <tr class="hover:bg-slate-100 transition-colors">
-                    <td class="p-3 font-medium">${p.x.toFixed(2)}</td>
-                    <td class="p-3 text-slate-900">${p.y.toFixed(2)}</td>
-                    <td class="p-3 text-slate-400">${fitB(p.x).toFixed(2)}</td>
-                </tr>
-            `).join('');
-        }
-
-        // Initialize Chart.js Chart
         let chartInstance = null;
 
+        // Initialize Lucide Icons
+        window.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            populateTables();
+            initChart();
+            calculateGeneticDistance(80.0);
+        });
+
+        // Interactive Segment Details Selector
+        function selectSegment(type) {
+            const box = document.getElementById('segment-details-box');
+            const tag = document.getElementById('detail-tag');
+            const title = document.getElementById('detail-title');
+            const desc = document.getElementById('detail-desc');
+            const span = document.getElementById('detail-span');
+            const rate = document.getElementById('detail-rate');
+            const eq = document.getElementById('detail-eq');
+
+            if (type === 'regionA') {
+                tag.innerText = "Selected Region: Region A";
+                title.innerText = "Female CEN to 120 Locus";
+                desc.innerText = "Proximal pericentromeric long arm segment spanning 40.07 Mb to 110.14 Mb. Exhibits a steady recombination velocity of 0.99 cM/Mb affected by pericentromeric cohesion.";
+                span.innerText = "70.07 Mb";
+                rate.innerText = "0.99 cM/Mb";
+                eq.innerText = "y = 0.99x - 32.33";
+            } else if (type === 'regionB') {
+                tag.innerText = "Selected Region: Region B";
+                title.innerText = "Female 120 to End Locus";
+                desc.innerText = "Distal telomeric q-arm segment spanning 106.3 Mb to 150.73 Mb. Demonstrates a 46.46% velocity acceleration (1.45 cM/Mb) driven by hotspot concentration.";
+                span.innerText = "44.43 Mb";
+                rate.innerText = "1.45 cM/Mb";
+                eq.innerText = "y = 1.45x - 79.71";
+            } else if (type === '12p') {
+                tag.innerText = "Chromosome 12 Short Arm (12p)";
+                title.innerText = "p-Arm Telomeric Locus";
+                desc.innerText = "Spans 0 to ~35.5 Mb. Contains crucial developmental genes and distinct crossover rates not included in the female 12q OLS study focus.";
+                span.innerText = "35.50 Mb";
+                rate.innerText = "~1.12 cM/Mb";
+                eq.innerText = "N/A (Reference Only)";
+            } else if (type === 'cen') {
+                tag.innerText = "Centromere Domain";
+                title.innerText = "Centromeric Suppression Zone";
+                desc.innerText = "Spans ~35.5 Mb to 38.5 Mb. Highly repetitive heterochromatin region where meiotic crossovers are suppressed to protect chromosomal segregation integrity.";
+                span.innerText = "~3.00 Mb";
+                rate.innerText = "0.00 cM/Mb";
+                eq.innerText = "Rate = 0 (Suppressed)";
+            }
+        }
+
+        // Initialize Chart.js
         function initChart() {
-            const ctx = document.getElementById('recombinationChart').getContext('2d');
+            const ctx = document.getElementById('regressionChart').getContext('2d');
 
-            // Generate Regression Line Points
-            const lineAData = [
-                { x: -5, y: fitA(-5) },
-                { x: 115, y: fitA(115) }
-            ];
-
-            const lineBData = [
-                { x: 100, y: fitB(100) },
-                { x: 155, y: fitB(155) }
-            ];
+            // Line generation for OLS
+            const lineA = [ { x: 40, y: predictA(40) }, { x: 110.14, y: predictA(110.14) } ];
+            const lineB = [ { x: 106.3, y: predictB(106.3) }, { x: 151, y: predictB(151) } ];
 
             chartInstance = new Chart(ctx, {
                 type: 'scatter',
                 data: {
                     datasets: [
                         {
-                            label: 'Region A Points (CEN to 120)',
+                            label: 'Region A Data Points',
                             data: dataRegionA,
-                            backgroundColor: '#14532d', // deep forest green
-                            borderColor: '#ffffff',
+                            backgroundColor: '#10b981',
+                            borderColor: '#047857',
                             borderWidth: 1.5,
                             pointRadius: 5,
-                            pointHoverRadius: 7,
+                            pointHoverRadius: 7
                         },
                         {
-                            label: 'Region A Fitted Line (y = 1.40x - 63.69)',
-                            data: lineAData,
+                            label: 'Region A OLS Line (y = 0.99x - 32.33)',
+                            data: lineA,
                             type: 'line',
-                            borderColor: '#16a34a',
-                            borderWidth: 2.5,
-                            pointRadius: 0,
-                            fill: false,
-                            tension: 0
-                        },
-                        {
-                            label: 'Region B Points (120 to End)',
-                            data: dataRegionB,
-                            backgroundColor: '#4ade80', // mint light green
-                            borderColor: '#0f172a',
-                            borderWidth: 1.5,
-                            pointRadius: 5,
-                            pointHoverRadius: 7,
-                        },
-                        {
-                            label: 'Region B Fitted Line (y = 0.95x - 22.64)',
-                            data: lineBData,
-                            type: 'line',
-                            borderColor: '#0284c7', // subtle contrasting soft blue line
+                            borderColor: '#34d399',
                             borderWidth: 2,
-                            borderDash: [6, 4],
-                            pointRadius: 0,
                             fill: false,
-                            tension: 0
+                            pointRadius: 0
+                        },
+                        {
+                            label: 'Region B Data Points',
+                            data: dataRegionB,
+                            backgroundColor: '#38bdf8',
+                            borderColor: '#0284c7',
+                            borderWidth: 1.5,
+                            pointRadius: 5,
+                            pointHoverRadius: 7
+                        },
+                        {
+                            label: 'Region B OLS Line (y = 1.45x - 79.71)',
+                            data: lineB,
+                            type: 'line',
+                            borderColor: '#38bdf8',
+                            borderWidth: 2,
+                            borderDash: [5, 5],
+                            fill: false,
+                            pointRadius: 0
                         }
                     ]
                 },
@@ -765,144 +752,141 @@
                     maintainAspectRatio: false,
                     plugins: {
                         legend: {
-                            display: true,
-                            position: 'top',
                             labels: {
-                                font: { family: 'Plus Jakarta Sans', size: 11, weight: '500' },
-                                color: '#334155',
-                                usePointStyle: true,
-                                boxWidth: 8
+                                color: '#cbd5e1',
+                                font: { family: 'Plus Jakarta Sans', size: 11 }
                             }
                         },
                         tooltip: {
-                            backgroundColor: 'rgba(5, 46, 22, 0.92)',
-                            titleFont: { family: 'Space Grotesk', size: 12 },
-                            bodyFont: { family: 'Plus Jakarta Sans', size: 12 },
-                            padding: 12,
-                            cornerRadius: 10,
                             callbacks: {
                                 label: function(context) {
-                                    return `Position: ${context.parsed.x.toFixed(2)} Mb | Genetic Dist: ${context.parsed.y.toFixed(2)} cM`;
+                                    return `Position: ${context.parsed.x} Mb, Distance: ${context.parsed.y} cM`;
                                 }
                             }
                         }
                     },
                     scales: {
                         x: {
-                            type: 'linear',
-                            position: 'bottom',
-                            title: {
-                                display: true,
-                                text: 'Physical Position (Mb)',
-                                font: { family: 'Space Grotesk', size: 12, weight: '600' },
-                                color: '#475569'
-                            },
-                            grid: { color: 'rgba(226, 232, 240, 0.6)' }
+                            title: { display: true, text: 'Physical Position (Mb)', color: '#94a3b8' },
+                            grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                            ticks: { color: '#94a3b8' },
+                            min: 35,
+                            max: 155
                         },
                         y: {
-                            title: {
-                                display: true,
-                                text: 'Genetic Distance (cM)',
-                                font: { family: 'Space Grotesk', size: 12, weight: '600' },
-                                color: '#475569'
-                            },
-                            grid: { color: 'rgba(226, 232, 240, 0.6)' }
+                            title: { display: true, text: 'Genetic Distance (cM)', color: '#94a3b8' },
+                            grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                            ticks: { color: '#94a3b8' },
+                            min: 0,
+                            max: 150
                         }
                     }
                 }
             });
         }
 
-        function updateChartMode(mode) {
-            const btnAll = document.getElementById('btn-all');
-            const btnA = document.getElementById('btn-regionA');
-            const btnB = document.getElementById('btn-regionB');
-
-            [btnAll, btnA, btnB].forEach(b => {
-                b.classList.remove('bg-white', 'shadow-sm', 'text-slate-900', 'font-semibold');
-                b.classList.add('text-slate-600');
-            });
+        // Chart Filter Handler
+        function updateChartFilter(mode) {
+            document.getElementById('btn-show-all').className = mode === 'all' ? "px-3 py-1.5 rounded-lg bg-emerald-700 text-white font-medium transition-all" : "px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition-all";
+            document.getElementById('btn-show-regA').className = mode === 'regA' ? "px-3 py-1.5 rounded-lg bg-emerald-700 text-white font-medium transition-all" : "px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition-all";
+            document.getElementById('btn-show-regB').className = mode === 'regB' ? "px-3 py-1.5 rounded-lg bg-emerald-700 text-white font-medium transition-all" : "px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition-all";
 
             if (mode === 'all') {
-                btnAll.classList.add('bg-white', 'shadow-sm', 'text-slate-900', 'font-semibold');
-                chartInstance.setDatasetVisibility(0, true);
-                chartInstance.setDatasetVisibility(1, true);
-                chartInstance.setDatasetVisibility(2, true);
-                chartInstance.setDatasetVisibility(3, true);
-            } else if (mode === 'regionA') {
-                btnA.classList.add('bg-white', 'shadow-sm', 'text-slate-900', 'font-semibold');
-                chartInstance.setDatasetVisibility(0, true);
-                chartInstance.setDatasetVisibility(1, true);
-                chartInstance.setDatasetVisibility(2, false);
-                chartInstance.setDatasetVisibility(3, false);
-            } else if (mode === 'regionB') {
-                btnB.classList.add('bg-white', 'shadow-sm', 'text-slate-900', 'font-semibold');
-                chartInstance.setDatasetVisibility(0, false);
-                chartInstance.setDatasetVisibility(1, false);
-                chartInstance.setDatasetVisibility(2, true);
-                chartInstance.setDatasetVisibility(3, true);
+                chartInstance.data.datasets[0].hidden = false;
+                chartInstance.data.datasets[1].hidden = false;
+                chartInstance.data.datasets[2].hidden = false;
+                chartInstance.data.datasets[3].hidden = false;
+            } else if (mode === 'regA') {
+                chartInstance.data.datasets[0].hidden = false;
+                chartInstance.data.datasets[1].hidden = false;
+                chartInstance.data.datasets[2].hidden = true;
+                chartInstance.data.datasets[3].hidden = true;
+            } else if (mode === 'regB') {
+                chartInstance.data.datasets[0].hidden = true;
+                chartInstance.data.datasets[1].hidden = true;
+                chartInstance.data.datasets[2].hidden = false;
+                chartInstance.data.datasets[3].hidden = false;
             }
             chartInstance.update();
         }
 
-        // Interactive Predictor Calculator Logic
-        function syncMbInput(val) {
-            document.getElementById('mbInput').value = parseFloat(val).toFixed(2);
-            document.getElementById('sliderValueDisplay').innerText = `${parseFloat(val).toFixed(2)} Mb`;
-            calculateGeneticDistance();
-        }
+        // Dynamic Predictor Calculation
+        function calculateGeneticDistance(val) {
+            const mb = parseFloat(val);
+            document.getElementById('calc-mb-val').innerText = mb.toFixed(1);
 
-        function syncSliderInput(val) {
-            const num = parseFloat(val) || 0;
-            document.getElementById('mbSlider').value = num;
-            document.getElementById('sliderValueDisplay').innerText = `${num.toFixed(2)} Mb`;
-            calculateGeneticDistance();
-        }
+            let cm = 0;
+            let regionName = "";
+            let eqText = "";
 
-        function calculateGeneticDistance() {
-            const region = document.getElementById('calcRegion').value;
-            const x = parseFloat(document.getElementById('mbInput').value) || 0;
-            let y = 0;
-            let formula = '';
-            let rate = '';
-
-            if (region === 'A') {
-                y = 1.40 * x - 63.69;
-                formula = `y = 1.40 × (${x.toFixed(2)}) - 63.69 = ${y.toFixed(2)} cM`;
-                rate = '1.40 cM per Mb (High Rate)';
+            if (mb < 108.0) {
+                cm = predictA(mb);
+                regionName = "Region A (Female CEN to 120)";
+                eqText = "Equation: y = 0.99x - 32.33";
             } else {
-                y = 0.95 * x - 22.64;
-                formula = `y = 0.95 × (${x.toFixed(2)}) - 22.64 = ${y.toFixed(2)} cM`;
-                rate = '0.95 cM per Mb (Moderate Rate)';
+                cm = predictB(mb);
+                regionName = "Region B (Female 120 to End)";
+                eqText = "Equation: y = 1.45x - 79.71";
             }
 
-            document.getElementById('calcResult').innerHTML = `${y.toFixed(2)} <span class="text-base font-sans font-normal text-brand-200">cM</span>`;
-            document.getElementById('calcFormulaText').innerText = formula;
-            document.getElementById('rateTag').innerText = rate;
+            document.getElementById('calc-region-name').innerText = regionName;
+            document.getElementById('calc-eq-display').innerText = eqText;
+            document.getElementById('calc-cm-result').innerText = `${cm.toFixed(2)} cM`;
         }
 
-        // Scroll Reveal Observer for Subtle Minimal Animations
-        function initScrollAnimations() {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active');
-                    }
-                });
-            }, { threshold: 0.1 });
+        // Populate Table Rows
+        function populateTables() {
+            const tbodyA = document.getElementById('tbody-A');
+            const tbodyB = document.getElementById('tbody-B');
 
-            document.querySelectorAll('.scroll-reveal').forEach(el => {
-                observer.observe(el);
-            });
+            tbodyA.innerHTML = dataRegionA.map((pt, i) => {
+                const fitted = predictA(pt.x);
+                const delta = pt.y - fitted;
+                return `
+                    <tr class="hover:bg-slate-50 transition-colors">
+                        <td class="py-3 px-6 font-semibold text-slate-400">#${i + 1}</td>
+                        <td class="py-3 px-6 text-slate-900">${pt.x.toFixed(2)} Mb</td>
+                        <td class="py-3 px-6 text-emerald-700 font-semibold">${pt.y.toFixed(2)} cM</td>
+                        <td class="py-3 px-6 text-slate-500">${fitted.toFixed(2)} cM</td>
+                        <td class="py-3 px-6 ${delta >= 0 ? 'text-emerald-600' : 'text-slate-400'}">${delta >= 0 ? '+' : ''}${delta.toFixed(2)}</td>
+                    </tr>
+                `;
+            }).join('');
+
+            tbodyB.innerHTML = dataRegionB.map((pt, i) => {
+                const fitted = predictB(pt.x);
+                const delta = pt.y - fitted;
+                return `
+                    <tr class="hover:bg-slate-50 transition-colors">
+                        <td class="py-3 px-6 font-semibold text-slate-400">#${i + 1}</td>
+                        <td class="py-3 px-6 text-slate-900">${pt.x.toFixed(2)} Mb</td>
+                        <td class="py-3 px-6 text-emerald-700 font-semibold">${pt.y.toFixed(2)} cM</td>
+                        <td class="py-3 px-6 text-slate-500">${fitted.toFixed(2)} cM</td>
+                        <td class="py-3 px-6 ${delta >= 0 ? 'text-emerald-600' : 'text-slate-400'}">${delta >= 0 ? '+' : ''}${delta.toFixed(2)}</td>
+                    </tr>
+                `;
+            }).join('');
         }
 
-        // Window Load Handler
-        window.onload = function() {
-            populateTables();
-            initChart();
-            calculateGeneticDistance();
-            initScrollAnimations();
-        };
+        // Switch Table Tab
+        function switchTable(region) {
+            const tabA = document.getElementById('tab-btn-A');
+            const tabB = document.getElementById('tab-btn-B');
+            const tableA = document.getElementById('table-regionA');
+            const tableB = document.getElementById('table-regionB');
+
+            if (region === 'A') {
+                tabA.className = "px-4 py-2 rounded-xl bg-emerald-900 text-white transition-all";
+                tabB.className = "px-4 py-2 rounded-xl text-slate-600 hover:text-slate-900 transition-all";
+                tableA.classList.remove('hidden');
+                tableB.classList.add('hidden');
+            } else {
+                tabB.className = "px-4 py-2 rounded-xl bg-emerald-900 text-white transition-all";
+                tabA.className = "px-4 py-2 rounded-xl text-slate-600 hover:text-slate-900 transition-all";
+                tableB.classList.remove('hidden');
+                tableA.classList.add('hidden');
+            }
+        }
     </script>
 </body>
 </html>
